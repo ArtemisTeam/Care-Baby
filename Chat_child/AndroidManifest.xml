@@ -34,7 +34,7 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-<!--         <receiver android:name="com.example.Chat_child.MyCustomReceiver" >
+       <!--  <receiver android:name="com.example.Chat_child.MyCustomReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
