@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -39,6 +40,8 @@ public class MainActivity extends Activity {
 	String password="12345";
 	String targetID=null;
 	String InstallationId=null;
+	MyCustomReceiver msg_receiver=null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,6 +103,7 @@ public class MainActivity extends Activity {
 			}
 		});
 
+
 		btnsend.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -117,11 +121,33 @@ public class MainActivity extends Activity {
 				//				                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 
+				//				AVQuery pushQuery = AVInstallation.getQuery();
+				//				pushQuery.whereEqualTo("installationId", targetID);
+				//				AVPush.sendMessageInBackground(InputMSG,  pushQuery, new SendCallback() {
+				//					@Override
+				//					public void done(AVException e) {
+				//						if (e == null) {
+				//							Log.i("push", "success!");
+				//						} else {
+				//							Log.i("push", "failure");
+				//						}
+				//					}
+				//				});
+
 				AVQuery pushQuery = AVInstallation.getQuery();
 				pushQuery.whereEqualTo("installationId", targetID);
-				AVPush.sendMessageInBackground(InputMSG,  pushQuery, new SendCallback() {
+				AVPush push = new AVPush();
+				push.setQuery(pushQuery);
+				JSONObject data=new JSONObject();
+				data.put("action",  "com.avos.UPDATE_STATUS");
+				data.put("send_time", date);
+				data.put("msg", InputMSG);
+				push.setData(data);
+				push.sendInBackground(new SendCallback() {
+
 					@Override
 					public void done(AVException e) {
+						// TODO Auto-generated method stub
 						if (e == null) {
 							Log.i("push", "success!");
 						} else {
@@ -129,27 +155,6 @@ public class MainActivity extends Activity {
 						}
 					}
 				});
-
-				//								AVQuery pushQuery = AVInstallation.getQuery();
-				//								pushQuery.whereEqualTo("installationId", targetID);
-				//								AVPush push = new AVPush();
-				//								push.setQuery(pushQuery);
-				//								JSONObject data=new JSONObject();
-				//								data.put("action",  "com.avos.UPDATE_STATUS");
-				//								data.put("msg", InputMSG);
-				//								push.setData(data);
-				//								push.sendInBackground(new SendCallback() {
-				//									
-				//									@Override
-				//									public void done(AVException e) {
-				//										// TODO Auto-generated method stub
-				//										 if (e == null) {
-				//								               Log.i("push", "success!");
-				//								           } else {
-				//								               Log.i("push", "failure");
-				//								           }
-				//									}
-				//								});
 
 				edt.setText("");
 
@@ -162,6 +167,12 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	@Override
+	protected void onDestroy() {
+	    super.onDestroy();
+	    unregisterReceiver(msg_receiver);
 	}
 
 }

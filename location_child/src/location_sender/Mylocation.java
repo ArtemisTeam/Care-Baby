@@ -1,18 +1,20 @@
 package location_sender;
 
 import android.app.Application;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.Process;
 import android.util.Log;
-
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.SaveCallback;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 
 public class Mylocation extends Application{
 	public LocationClient mLocationClient = null;
@@ -27,7 +29,7 @@ public class Mylocation extends Application{
 		mLocationClient.registerLocationListener( myListener );
 		LocationClientOption option = new LocationClientOption();
 		option.setCoorType("bd09ll");
-		option.setScanSpan(5);
+		option.setScanSpan(5);	
 		mLocationClient.setLocOption(option);
 		super.onCreate(); 
 		mLocationClient.start();
@@ -38,22 +40,31 @@ public class Mylocation extends Application{
 		public void onReceiveLocation(BDLocation location) {
 			if (location == null)
 				return ;
+			//获取电量百分比
+			Intent batteryIntent = getApplicationContext().registerReceiver(null,
+					new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+			int currLevel = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+			int total = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, 1);
+			int percent = currLevel * 100 / total;
+			
+			Log.i("battery", "battery: " + percent + "%");
 			AVObject loc = new AVObject("Location");
 			loc.put("username", username+"_child");
 			loc.put("Latitude",location.getLatitude());
 			Log.i("latitude", location.getLatitude()+"");
 			loc.put("Longtitude", location.getLongitude());
 			Log.i("Longtitude",location.getLongitude()+"");
+			loc.put("battery", percent+"");
 			loc.saveInBackground(new SaveCallback() {
-				
+
 				@Override
 				public void done(AVException e) {
 					// TODO Auto-generated method stub
 					if (e == null) {
-			               Log.i("state", "save success");
-			           } else {
-			        	   Log.i("state", "save fail");
-			           }
+						Log.i("state", "save success");
+					} else {
+						Log.i("state", "save fail");
+					}
 				}
 			});
 		}

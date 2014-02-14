@@ -37,14 +37,14 @@
             </intent-filter>
         </receiver>
         
-            <!--  <receiver android:name="com.example.Chat_parent.MyCustomReceiver" >
+             <receiver android:name=".MyCustomReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="com.avos.UPDATE_STATUS" />
             </intent-filter>
-        </receiver> -->
+        </receiver>
        
     </application>
 

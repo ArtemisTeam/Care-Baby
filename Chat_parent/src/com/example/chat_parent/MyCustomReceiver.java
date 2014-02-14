@@ -12,7 +12,8 @@ import android.util.Log;
 
 public class MyCustomReceiver extends BroadcastReceiver {
     private static final String TAG = "MyCustomReceiver";
-
+    String message=null;
+    String date=null;
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Get Broadcat");
@@ -25,7 +26,12 @@ public class MyCustomReceiver extends BroadcastReceiver {
             Iterator itr = json.keys();
             while (itr.hasNext()) {
                 String key = (String) itr.next();
-                Log.d(TAG, "..." + key + " => " + json.getString(key));
+                Log.d(TAG, "..." + key + " => " + json.getString(key));//key=msg时，就是收到的消息，放回聊天的activity
+                if(key=="msg")
+                {
+                	message=json.getString("msg");
+                	date=json.getString("send_time");
+                }
             }
         } catch (JSONException e) {
             Log.d(TAG, "JSONException: " + e.getMessage());
