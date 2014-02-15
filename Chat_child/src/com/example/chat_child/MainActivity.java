@@ -37,6 +37,7 @@ public class MainActivity extends Activity {
 	String password="12345";
 	String targetID=null;
 	String InstallationId=null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -116,40 +117,40 @@ public class MainActivity extends Activity {
 
 
 
-//				AVQuery pushQuery = AVInstallation.getQuery();
-//				pushQuery.whereEqualTo("installationId", targetID);
-//				AVPush.sendMessageInBackground(InputMSG,  pushQuery, new SendCallback() {
-//					@Override
-//					public void done(AVException e) {
-//						if (e == null) {
-//							Log.d("push", "success!");
-//						} else {
-//							Log.d("push", "failure");
-//						}
-//					}
-//				});
+				//				AVQuery pushQuery = AVInstallation.getQuery();
+				//				pushQuery.whereEqualTo("installationId", targetID);
+				//				AVPush.sendMessageInBackground(InputMSG,  pushQuery, new SendCallback() {
+				//					@Override
+				//					public void done(AVException e) {
+				//						if (e == null) {
+				//							Log.d("push", "success!");
+				//						} else {
+				//							Log.d("push", "failure");
+				//						}
+				//					}
+				//				});
 
-												AVQuery pushQuery = AVInstallation.getQuery();
-												pushQuery.whereEqualTo("installationId", targetID);
-												AVPush push = new AVPush();
-												push.setQuery(pushQuery);
-												JSONObject data=new JSONObject();
-												data.put("action",  "com.avos.UPDATE_STATUS");
-												data.put("send_time", date);
-												data.put("msg", InputMSG);
-												push.setData(data);
-												push.sendInBackground(new SendCallback() {
-								
-													@Override
-													public void done(AVException e) {
-														// TODO Auto-generated method stub
-														if (e == null) {
-															Log.d("push", "success!");
-														} else {
-															Log.d("push", "failure");
-														}
-													}
-												});
+				AVQuery pushQuery = AVInstallation.getQuery();
+				pushQuery.whereEqualTo("installationId", targetID);
+				AVPush push = new AVPush();
+				push.setQuery(pushQuery);
+				JSONObject data=new JSONObject();
+				data.put("action",  "com.avos.UPDATE_STATUS");
+				data.put("send_time", date);
+				data.put("msg", InputMSG);
+				push.setData(data);
+				push.sendInBackground(new SendCallback() {
+
+					@Override
+					public void done(AVException e) {
+						// TODO Auto-generated method stub
+						if (e == null) {
+							Log.d("push", "success!");
+						} else {
+							Log.d("push", "failure");
+						}
+					}
+				});
 
 				edt.setText("");
 
@@ -163,5 +164,10 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+	
 }
