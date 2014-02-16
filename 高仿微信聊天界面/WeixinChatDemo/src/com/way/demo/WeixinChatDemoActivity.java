@@ -45,6 +45,7 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 	String password="12345";
 	String targetID=null;
 	String InstallationId=null;
+	DB mydb=null;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,7 +74,7 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 			"打啊！你放大啊！", "你TM咋不放大呢？留大抢人头啊？CAO！你个菜B", "2B不解释", "尼滚...",
 			"今晚去网吧包夜吧？", "有毛片吗？", "种子一大堆啊~还怕没片？", "OK,搞起！！" };
 
-	private String[] dataArray = new String[] { "2012-09-22 18:00:02",
+	private String[] dateArray = new String[] { "2012-09-22 18:00:02",
 			"2012-09-22 18:10:22", "2012-09-22 18:11:24",
 			"2012-09-22 18:20:23", "2012-09-22 18:30:31",
 			"2012-09-22 18:35:37", "2012-09-22 18:40:13",
@@ -93,6 +94,7 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 		InstallationId=AVInstallation.getCurrentInstallation().getInstallationId();
 		Log.i("state","this device id is "+InstallationId);
 		AVInstallation.getCurrentInstallation().saveInBackground();
+		mydb=new DB();
 
 		//更新_User表中的installationId
 		AVUser user=new AVUser();
@@ -139,9 +141,10 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 			}
 		});
 
+		//加载历史消息
 		for (int i = 0; i < COUNT; i++) {
 			ChatMsgEntity entity = new ChatMsgEntity();
-			entity.setDate(dataArray[i]);
+			entity.setDate(dateArray[i]);
 			if (i % 2 == 0) {
 				entity.setName("孩子");
 				entity.setMsgType(true);// 收到的消息
@@ -188,6 +191,7 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 
 			mListView.setSelection(mListView.getCount() - 1);// 发送一条消息时，ListView显示选择最后一项
 
+			mydb.InsertMsg(username,contString);
 			AVQuery pushQuery = AVInstallation.getQuery();
 			pushQuery.whereEqualTo("installationId", targetID);
 			AVPush push = new AVPush();
@@ -220,5 +224,11 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 	private String getDate() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		return format.format(new Date());
+	}
+
+	@Override
+	protected void onDestroy(){
+		mydb.CloseDB();
+		super.onDestroy();
 	}
 }
