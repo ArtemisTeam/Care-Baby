@@ -11,13 +11,16 @@ public class DB {
 	private SimpleDateFormat sDateFormat=null;
 	public DB()
 	{
+		SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	}
+	public void OpenDB()
+	{
 		db.openOrCreateDatabase("care_baby.db", null);  
 		Cursor cnt= db.rawQuery("select count(*) as num from sqlite_master where type= 'table' and name = ?",new String[]{"Chat_Message"});
 		if(cnt.moveToFirst()&&(cnt.getInt(cnt.getColumnIndex("num"))==0)){
 			db.execSQL("CREATE TABLE Chat_Message (_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT, message TEXT,tm TEXT)");  
 		}
 		cnt.close();
-		SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	}
 	public void InsertMsg(String name,String msg)
 	{

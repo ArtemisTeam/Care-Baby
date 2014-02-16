@@ -191,7 +191,9 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 
 			mListView.setSelection(mListView.getCount() - 1);// 发送一条消息时，ListView显示选择最后一项
 
+			mydb.OpenDB();
 			mydb.InsertMsg(username,contString);
+			mydb.CloseDB();
 			AVQuery pushQuery = AVInstallation.getQuery();
 			pushQuery.whereEqualTo("installationId", targetID);
 			AVPush push = new AVPush();
