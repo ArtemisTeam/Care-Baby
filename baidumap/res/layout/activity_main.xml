@@ -28,12 +28,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="孩子轨迹" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -49,10 +43,17 @@
 
         <EditText
             android:id="@+id/editText1"
+            android:inputType="number"
             android:layout_width="153dp"
             android:layout_height="wrap_content"
             android:ems="10" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="取消设定范围" />
 
 </LinearLayout>

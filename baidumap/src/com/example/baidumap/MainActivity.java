@@ -29,7 +29,6 @@ import com.baidu.mapapi.map.MyLocationOverlay;
 import com.baidu.mapapi.map.Symbol;
 import com.baidu.mapapi.map.Symbol.Color;
 import com.baidu.mapapi.map.Symbol.Stroke;
-import com.baidu.mapapi.search.PlaceCaterActivity;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 
@@ -37,43 +36,90 @@ public class MainActivity extends Activity implements OnClickListener{
 	BMapManager mBMapMan = null;
 	MapView mMapView = null;
 	Button current_loc=null;
-	Button trajectory=null;
+	Button cancel_set=null;
 	Button set_range=null;
 	EditText edt=null;
 	LocationData locData=null;
 	MyLocationOverlay myLocationOverlay=null;
+	GraphicsOverlay graphicsOverlay=null;
 	String username="211";
 	int set_distance;
 	int tar_la;
 	int tar_lo;
 	boolean isFollowTrail=false;
-	boolean isShowTrail=false;
 	boolean isSetRange=false;
-	@Override
-	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		AVOSCloud.useAVCloudCN();
-		AVOSCloud.initialize(this, "9f9kc7n2gfm4ug07arijhef5roy4kvq4l1xh6voy714hfswm", "2nuzsw9x0tw3mheybe7spewu43bfwnfoujry68g51973watr");
-		AVAnalytics.trackAppOpened(getIntent());
-		mBMapMan=new BMapManager(getApplication());
-		mBMapMan.init("8GX4jfnPmYXXeTwXP3QcccAy", null);  
+	boolean isSame=false;
+	private Handler handler = new Handler();
 
-		//注意：请在试用setContentView前初始化BMapManager对象，否则会报错
-		setContentView(R.layout.activity_main);
-		initView();
-		initData();
-	}
+	private Runnable runnable = new Runnable() {
+		@Override
+		public void run () {
+			AVQuery<AVObject> query = new AVQuery<AVObject>("Location");
+			query.whereEqualTo("username", "211_child");
+			query.orderByDescending("createdAt");
+			query.findInBackground(new FindCallback<AVObject>() {
 
-	public void initView()
-	{
-		mMapView=(MapView)findViewById(R.id.bmapsView);
-		current_loc=(Button)findViewById(R.id.button1);
-		current_loc.setOnClickListener(this);
-		trajectory=(Button)findViewById(R.id.button2);
-		trajectory.setOnClickListener(this);
-		set_range=(Button)findViewById(R.id.button3);
-		set_range.setOnClickListener(this);
-		edt=(EditText)findViewById(R.id.editText1);
+				@Override
+				public void done(List<AVObject> arg0, AVException arg1) {
+					// TODO Auto-generated method stub
+					if(arg1==null){
+						if(arg0!=null){
+							Log.i("state", arg0.size()+"");
+							AVObject point;
+							point=arg0.get(0);
+							if(locData.latitude==point.getDouble("Latitude")
+									&&locData.longitude==point.getDouble("Longtitude")){
+								isSame=true;//本次获取的坐标与上一次相同
+								return;
+							}else{
+								isSame=false;//本次获取的坐标与上一次获取的不同
+							}
+
+							locData.latitude=point.getDouble("Latitude");
+							locData.longitude=point.getDouble("Longtitude");
+							Log.i("loc", "latitude "+locData.latitude);
+							Log.i("loc", "longtitude "+locData.longitude);
+							if(isFollowTrail==true){
+								Log.i("state", "into isFollowTrail");
+								myLocationOverlay.setData(locData);
+								//								mMapView.getOverlays().add(myLocationOverlay);  
+								mMapView.refresh();
+								GeoPoint p1=new GeoPoint((int)(locData.latitude*1e6),
+										(int)(locData.longitude* 1e6));
+								mMapView.getController().animateTo(p1);
+								Log.i("state", "reanimate");
+							}else if(isSetRange==true){
+								Log.i("state", "into isSetRange");
+								GeoPoint p1=new GeoPoint((int)(locData.latitude*1e6),
+										(int)(locData.longitude* 1e6));
+								GeoPoint p2=new GeoPoint(tar_la, tar_lo);
+								double distance = DistanceUtil.getDistance(p1, p2);
+								if(distance>set_distance){
+									Toast.makeText(getApplicationContext(), "孩子超出安全范围！",
+											Toast.LENGTH_SHORT).show();
+								}
+							}
+						}else{
+							Log.i("state","query for nothing");
+						}
+					}else{
+						Log.i("exception", arg1.getMessage());
+					}
+				}
+
+			});
+			handler.postDelayed(this,5000); 
+		}
+
+	};
+	public void FollowTrail(){
+		if(isFollowTrail==false){
+			Log.i("state", "clicked FollowTrail");
+			isFollowTrail=true;
+		}else{
+			Log.i("state", "clicked FollowTrail");
+			isFollowTrail=false;
+		}
 	}
 	public void initData()
 	{
@@ -97,84 +143,56 @@ public class MainActivity extends Activity implements OnClickListener{
 		};
 		myLocationOverlay = new MyLocationOverlay(mMapView);
 		locData = new LocationData();
-		//手动将位置源置为天安门，在实际应用中，请使用百度定位SDK获取位置信息，要在SDK中显示一个位置，需要使用百度经纬度坐标（bd09ll）
-		//		locData.latitude = 39.945;
-		//		locData.longitude = 116.404;
-		//locData.direction = 2.0f;
-		//		myLocationOverlay.setData(locData);
+		locData.latitude=999;
+		locData.longitude=999;
+		myLocationOverlay.setData(locData);
 		mMapView.getOverlays().add(myLocationOverlay);
 		mMapView.refresh();
 		mMapView.setSatellite(true);  
 		mMapView.getController().setZoom(19);
-		//		GeoPoint p1=new GeoPoint((int)(locData.latitude*1e6),
-		//				(int)(locData.longitude* 1e6));
-		//		mMapView.getController().animateTo(p1);
-		//		handler.postDelayed(runnable,5000); 
 
-		////        	mMapView.setBuiltInZoomControls(true);
-		//        	mMapView.setSatellite(true);  
-		//        	//设置启用内置的缩放控件
-		//        	MapController mMapController=mMapView.getController();
-		//        	// 得到mMapView的控制权,可以用它控制和驱动平移和缩放
-		//        	GeoPoint point =new GeoPoint((int)(39.915* 1E6),(int)(116.404* 1E6));
-		//        	//用给定的经纬度构造一个GeoPoint，单位是微度 (度 * 1E6)
-		//        	mMapController.setCenter(point);//设置地图中心点
-		//        	mMapController.setZoom(19);//设置地图zoom级别[3,19]
+		handler.postDelayed(runnable,5000); 
 	}
-	private Handler handler = new Handler();
-	private Runnable runnable = new Runnable() {
-		public void run () {
-			AVQuery<AVObject> query = new AVQuery<AVObject>("Location");
-			query.whereEqualTo("username", "211_child");
-			query.orderByDescending("createdAt");
-			query.findInBackground(new FindCallback<AVObject>() {
-
-				@Override
-				public void done(List<AVObject> arg0, AVException arg1) {
-					// TODO Auto-generated method stub
-					if(arg1==null){
-						if(arg0!=null){
-							Log.i("state", arg0.size()+"");
-							AVObject point;
-							point=arg0.get(0);
-							if(locData.latitude==point.getDouble("Latitude")
-									&&locData.longitude==point.getDouble("Longtitude")){
-								return;
-							}
-							locData.latitude=point.getDouble("Latitude");
-							locData.longitude=point.getDouble("Longtitude");
-							Log.i("loc", "latitude "+locData.latitude);
-							Log.i("loc", "longtitude "+locData.longitude);
-							if(isFollowTrail==true){
-								myLocationOverlay.setData(locData);
-								mMapView.refresh();
-								GeoPoint p1=new GeoPoint((int)(locData.latitude*1e6),
-										(int)(locData.longitude* 1e6));
-								mMapView.getController().animateTo(p1);
-								Log.i("state", "reanimate");
-							}else if(isSetRange==true){
-								GeoPoint p1=new GeoPoint((int)(locData.latitude*1e6),
-										(int)(locData.longitude* 1e6));
-								GeoPoint p2=new GeoPoint(tar_la, tar_lo);
-								double distance = DistanceUtil.getDistance(p1, p2);
-								if(distance>set_distance){
-									Toast.makeText(getApplicationContext(), "孩子超出安全范围！",
-											Toast.LENGTH_SHORT).show();
-								}
-							}
-						}else{
-							Log.i("state","query for nothing");
-						}
-					}else{
-						Log.i("exception", arg1.getMessage());
-					}
-				}
-
-			});
-			handler.postDelayed(this,5000); 
+	public void initView()
+	{
+		mMapView=(MapView)findViewById(R.id.bmapsView);
+		current_loc=(Button)findViewById(R.id.button1);
+		current_loc.setOnClickListener(this);
+		cancel_set=(Button)findViewById(R.id.button2);
+		cancel_set.setOnClickListener(this);
+		set_range=(Button)findViewById(R.id.button3);
+		set_range.setOnClickListener(this);
+		edt=(EditText)findViewById(R.id.editText1);
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.button1:
+			FollowTrail();
+			break;
+		case R.id.button2:
+			RemoveRange();
+			break;
+		case R.id.button3:
+			SetRange();
+			break;
 		}
+	}
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		AVOSCloud.useAVCloudCN();
+		AVOSCloud.initialize(this, "9f9kc7n2gfm4ug07arijhef5roy4kvq4l1xh6voy714hfswm", "2nuzsw9x0tw3mheybe7spewu43bfwnfoujry68g51973watr");
+		AVAnalytics.trackAppOpened(getIntent());
+		mBMapMan=new BMapManager(getApplication());
+		mBMapMan.init("8GX4jfnPmYXXeTwXP3QcccAy", null);  
 
-	};
+		//注意：请在试用setContentView前初始化BMapManager对象，否则会报错
+		setContentView(R.layout.activity_main);
+		initView();
+		initData();
+	}
 	@Override
 	protected void onDestroy(){
 		mMapView.destroy();
@@ -185,6 +203,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		handler.removeCallbacks(runnable); //停止刷新
 		super.onDestroy();
 	}
+
 	@Override
 	protected void onPause(){
 		mMapView.onPause();
@@ -193,6 +212,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		}
 		super.onPause();
 	}
+
 	@Override
 	protected void onResume(){
 		mMapView.onResume();
@@ -202,46 +222,62 @@ public class MainActivity extends Activity implements OnClickListener{
 		super.onResume();
 	}
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		switch (v.getId()) {
-		case R.id.button1:
-			FollowTrail();
-			break;
-		case R.id.button2:
-			ShowTrail();
-			break;
-		case R.id.button3:
-			SetRange();
-		}
-	}
-
-	public void FollowTrail(){
-		if(isFollowTrail==false){
-			isFollowTrail=true;
-		}else{
-			isFollowTrail=false;
-		}
-	}
-
-	public void ShowTrail(){
-
-	}
-
 	public void SetRange(){
-		if(isSetRange==false){
-			isSetRange=true;	
-			set_distance=Integer.parseInt(edt.getText().toString().trim());
-		}else{
-			isSetRange=false;
-			edt.setText(null);
+		String input=edt.getText().toString();
+		if(Integer.parseInt(input)<=0){
+			return;
 		}
-		//画圈待添加
-//		GeoPoint p=new GeoPoint(tar_la, tar_lo);
-//		Geometry palaceGeometry = new Geometry();
-//		palaceGeometry.setCircle(p, set_distance);
-		
+		if(isSetRange==false){
+			Log.i("state", "clicked SetRange");
+			isSetRange=true;	
+			set_distance=Integer.parseInt(input);
+		}else {
+			if(set_distance!=Integer.parseInt(input)){
+				Log.i("state", "clicked SetRange");
+				isSetRange=true;	
+				set_distance=Integer.parseInt(input);
+			}else{
+				Log.i("state", "clicked SetRange");
+				isSetRange=false;
+				edt.setText(null);
+			}
+		}
+		if(isSetRange==true){
+		//画圈
+		graphicsOverlay = new GraphicsOverlay(mMapView);
+		mMapView.getOverlays().add(graphicsOverlay);
+		graphicsOverlay.setData(drawCircle());
+		//执行地图刷新使生效
+		mMapView.refresh();
+		}
+	}
+	
+	public void RemoveRange(){
+		mMapView.getOverlays().remove(graphicsOverlay);
+		edt.setText(null);
+		isSetRange=false;
+	}
+
+	public Graphic drawCircle() {
+
+		GeoPoint pt1 = new GeoPoint(tar_la,tar_lo);
+
+		//构建圆
+		Geometry circleGeometry = new Geometry();
+
+		//设置圆中心点坐标和半径
+		circleGeometry.setCircle(pt1, set_distance);//设定圆心，半径
+		//设置样式
+		Symbol circleSymbol = new Symbol();
+		Symbol.Color circleColor = circleSymbol.new Color();
+		circleColor.red = 0;
+		circleColor.green = 255;
+		circleColor.blue = 0;
+		circleColor.alpha = 126;
+		circleSymbol.setSurface(circleColor,1,3, new Stroke(3, circleSymbol.new Color(0xFFFF0000)));
+		//生成Graphic对象
+		Graphic circleGraphic = new Graphic(circleGeometry, circleSymbol);
+		return circleGraphic;
 	}
 
 } 
