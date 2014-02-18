@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
 
 		//更新_User表中的installationId
 		AVUser user=new AVUser();
-		user.logInInBackground(username+"_child", password, new LogInCallback<AVUser>() {
+		AVUser.logInInBackground(username+"_child", password, new LogInCallback<AVUser>() {
 
 			@Override
 			public void done(AVUser arg0, AVException arg1) {
@@ -77,6 +77,7 @@ public class MainActivity extends Activity {
 								AVQuery<AVObject> query2 = new AVQuery<AVObject>("_User");
 								query2.whereEqualTo("username", username+"_parent");
 								query2.findInBackground(new FindCallback<AVObject>() {
+									@Override
 									public void done(List<AVObject> avObjects, AVException e) {
 										if (e == null) {
 											Log.d("成功2", "查询到" + avObjects.size() + " 条符合条件的数据");

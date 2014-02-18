@@ -14,7 +14,6 @@ import com.avos.avoscloud.SignUpCallback;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -132,7 +131,7 @@ public class MainActivity extends Activity {
 					//提示密码格式错误
 					return;
 				}
-				user.logInInBackground(username+"_parent", password, new LogInCallback<AVUser>() {
+				AVUser.logInInBackground(username+"_parent", password, new LogInCallback<AVUser>() {
 
 					@Override
 					public void done(AVUser arg0, AVException arg1) {

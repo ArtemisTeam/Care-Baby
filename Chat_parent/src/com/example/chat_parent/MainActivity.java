@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -27,10 +26,8 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.PushService;
-import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SendCallback;
 import com.avos.avoscloud.SignUpCallback;
-import com.avos.security.auth.callback.Callback;
 
 public class MainActivity extends Activity {
 	Button btnsend;
@@ -59,7 +56,7 @@ public class MainActivity extends Activity {
 
 		//更新_User表中的installationId
 		AVUser user=new AVUser();
-		user.logInInBackground(username+"_parent", password, new LogInCallback<AVUser>() {
+		AVUser.logInInBackground(username+"_parent", password, new LogInCallback<AVUser>() {
 
 			@Override
 			public void done(AVUser arg0, AVException arg1) {
@@ -81,6 +78,7 @@ public class MainActivity extends Activity {
 								AVQuery<AVObject> query2 = new AVQuery<AVObject>("_User");
 								query2.whereEqualTo("username", username+"_child");
 								query2.findInBackground(new FindCallback<AVObject>() {
+									@Override
 									public void done(List<AVObject> avObjects, AVException e) {
 										if (e == null) {
 											Log.i("成功222", "查询到" + avObjects.size() + " 条符合条件的数据");

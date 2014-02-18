@@ -19,16 +19,10 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 import com.baidu.mapapi.BMapManager;
-import com.baidu.mapapi.map.Geometry;
-import com.baidu.mapapi.map.Graphic;
 import com.baidu.mapapi.map.GraphicsOverlay;
 import com.baidu.mapapi.map.LocationData;
-import com.baidu.mapapi.map.MKMapTouchListener;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationOverlay;
-import com.baidu.mapapi.map.Symbol;
-import com.baidu.mapapi.map.Symbol.Color;
-import com.baidu.mapapi.map.Symbol.Stroke;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 

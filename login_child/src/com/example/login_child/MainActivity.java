@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
 					//提示密码格式错误
 					return;
 				}
-				user.logInInBackground(username+"_child", password, new LogInCallback<AVUser>() {
+				AVUser.logInInBackground(username+"_child", password, new LogInCallback<AVUser>() {
 
 					@Override
 					public void done(AVUser arg0, AVException arg1) {
