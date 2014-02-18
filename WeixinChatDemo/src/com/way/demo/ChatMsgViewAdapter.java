@@ -31,14 +31,17 @@ public class ChatMsgViewAdapter extends BaseAdapter {
 		mInflater = LayoutInflater.from(context);
 	}
 
+	@Override
 	public int getCount() {
 		return coll.size();
 	}
 
+	@Override
 	public Object getItem(int position) {
 		return coll.get(position);
 	}
 
+	@Override
 	public long getItemId(int position) {
 		return position;
 	}
@@ -46,6 +49,7 @@ public class ChatMsgViewAdapter extends BaseAdapter {
 	/**
 	 * 得到Item的类型，是对方发过来的消息，还是自己发送出去的
 	 */
+	@Override
 	public int getItemViewType(int position) {
 		ChatMsgEntity entity = coll.get(position);
 
@@ -59,10 +63,12 @@ public class ChatMsgViewAdapter extends BaseAdapter {
 	/**
 	 * Item类型的总数
 	 */
+	@Override
 	public int getViewTypeCount() {
 		return ITEMCOUNT;
 	}
 
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		ChatMsgEntity entity = coll.get(position);

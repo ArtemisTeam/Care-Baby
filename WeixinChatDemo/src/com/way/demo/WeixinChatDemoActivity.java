@@ -45,8 +45,8 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 	String password="12345";
 	String targetID=null;
 	String InstallationId=null;
-	DB mydb=null;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
@@ -94,11 +94,10 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 		InstallationId=AVInstallation.getCurrentInstallation().getInstallationId();
 		Log.i("state","this device id is "+InstallationId);
 		AVInstallation.getCurrentInstallation().saveInBackground();
-		mydb=new DB();
 
 		//更新_User表中的installationId
 		AVUser user=new AVUser();
-		user.logInInBackground(username+"_parent", password, new LogInCallback<AVUser>() {
+		AVUser.logInInBackground(username+"_parent", password, new LogInCallback<AVUser>() {
 
 			@Override
 			public void done(AVUser arg0, AVException arg1) {
@@ -120,6 +119,7 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 								AVQuery<AVObject> query2 = new AVQuery<AVObject>("_User");
 								query2.whereEqualTo("username", username+"_child");
 								query2.findInBackground(new FindCallback<AVObject>() {
+									@Override
 									public void done(List<AVObject> avObjects, AVException e) {
 										if (e == null) {
 											Log.i("成功222", "查询到" + avObjects.size() + " 条符合条件的数据");
@@ -191,9 +191,6 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 
 			mListView.setSelection(mListView.getCount() - 1);// 发送一条消息时，ListView显示选择最后一项
 
-			mydb.OpenDB();
-			mydb.InsertMsg(username,contString);
-			mydb.CloseDB();
 			AVQuery pushQuery = AVInstallation.getQuery();
 			pushQuery.whereEqualTo("installationId", targetID);
 			AVPush push = new AVPush();
@@ -230,7 +227,6 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 
 	@Override
 	protected void onDestroy(){
-		mydb.CloseDB();
 		super.onDestroy();
 	}
 }

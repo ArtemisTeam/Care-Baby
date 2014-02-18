@@ -15,11 +15,10 @@ public class MyCustomReceiver extends BroadcastReceiver {
     String username="211";
     String message=null;
     String date=null;
-    DB mydb=null;
+
     @Override
     public void onReceive(Context context, Intent intent) {
-    	mydb=new DB();
-    	mydb.OpenDB();
+
         Log.d(TAG, "Get Broadcat");
         try {
             String action = intent.getAction();
@@ -35,8 +34,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
                 {
                 	message=json.getString("msg");
                 	date=json.getString("send_time");
-                	mydb.InsertMsg(username, message, date);
-                	mydb.CloseDB();
+
                 }
             }
         } catch (JSONException e) {
