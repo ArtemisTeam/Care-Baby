@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class MyCustomReceiver extends BroadcastReceiver {
     private static final String TAG = "MyCustomReceiver";
-    String username="211";
+    
     String message=null;
     String date=null;
 

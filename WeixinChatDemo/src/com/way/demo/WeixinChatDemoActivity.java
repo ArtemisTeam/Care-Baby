@@ -70,18 +70,6 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 		mEditTextContent = (EditText) findViewById(R.id.et_sendmessage);
 	}
 
-	private String[] msgArray = new String[] { "有大吗", "有！你呢？", "我也有", "那上吧",
-			"打啊！你放大啊！", "你TM咋不放大呢？留大抢人头啊？CAO！你个菜B", "2B不解释", "尼滚...",
-			"今晚去网吧包夜吧？", "有毛片吗？", "种子一大堆啊~还怕没片？", "OK,搞起！！" };
-
-	private String[] dateArray = new String[] { "2012-09-22 18:00:02",
-			"2012-09-22 18:10:22", "2012-09-22 18:11:24",
-			"2012-09-22 18:20:23", "2012-09-22 18:30:31",
-			"2012-09-22 18:35:37", "2012-09-22 18:40:13",
-			"2012-09-22 18:50:26", "2012-09-22 18:52:57",
-			"2012-09-22 18:55:11", "2012-09-22 18:56:45",
-			"2012-09-22 18:57:33", };
-	private final static int COUNT = 12;// 初始化数组总数
 
 	/**
 	 * 模拟加载消息历史，实际开发可以从数据库中读出
@@ -141,20 +129,7 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 			}
 		});
 
-		//加载历史消息
-		for (int i = 0; i < COUNT; i++) {
-			ChatMsgEntity entity = new ChatMsgEntity();
-			entity.setDate(dateArray[i]);
-			if (i % 2 == 0) {
-				entity.setName("孩子");
-				entity.setMsgType(true);// 收到的消息
-			} else {
-				entity.setName(username);
-				entity.setMsgType(false);// 自己发送的消息
-			}
-			entity.setMessage(msgArray[i]);
-			mDataArrays.add(entity);
-		}
+
 
 		mAdapter = new ChatMsgViewAdapter(this, mDataArrays);
 		mListView.setAdapter(mAdapter);
@@ -179,7 +154,7 @@ public class WeixinChatDemoActivity extends Activity implements OnClickListener 
 		String contString = mEditTextContent.getText().toString();
 		if (contString.length() > 0) {
 			ChatMsgEntity entity = new ChatMsgEntity();
-			entity.setName(username);//登录时的用户名
+			entity.setName("家长");//登录时的用户名
 			entity.setDate(getDate());
 			entity.setMessage(contString);
 			entity.setMsgType(false);
