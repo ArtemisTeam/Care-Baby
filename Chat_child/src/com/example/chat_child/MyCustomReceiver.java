@@ -27,7 +27,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
             while (itr.hasNext()) {
                 String key = (String) itr.next();
                 Log.d(TAG, "..." + key + " => " + json.getString(key));//key=msg时，就是收到的消息，放回聊天的activity
-                if(key=="msg")
+                if(key.equals("msg"))
                 {
                 	message=json.getString("msg");
                 	date=json.getString("send_time");
