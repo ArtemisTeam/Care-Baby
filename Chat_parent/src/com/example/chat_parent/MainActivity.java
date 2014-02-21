@@ -33,8 +33,8 @@ public class MainActivity extends Activity {
 	Button btnsend;
 	EditText edt;
 	TextView tv;
-	String username="222";//登陆用户基本名家长端需要加后缀_parent
-	String password="12345";
+	String username="wanghe";//登陆用户基本名家长端需要加后缀_parent
+	String password="0000";
 	String targetID=null;
 	String InstallationId=null;
 
