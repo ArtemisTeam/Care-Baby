@@ -13,6 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/*
+ * 由于缺少第三方库导致bug
+ */
 public class ColorMenuFragment extends ListFragment {
 
 	@Override
