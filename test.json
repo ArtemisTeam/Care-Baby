@@ -1,0 +1,112 @@
+{
+    "state":
+}
+登陆。注册。接收。
+
+
+{
+    "flush":
+}
+设置
+
+
+{
+    "point":[
+        {"flag": ,"timestamp": ,"x": , "y": }
+    ]
+}
+返回坐标数组
+
+<"username": >
+<"times": >
+
+{ 
+    "point":[
+        {"flag":"1" ,"timestamp":"$time" ,"x":"$x" , "y":"$y"},
+        {"flag":"1" ,"timestamp":"$time" ,"x":"$x" , "y":"$y"},
+        {"flag":"1" ,"timestamp":"$time" ,"x":"$x" , "y":"$y"},
+        {"flag":"1" ,"timestamp":"$time" ,"x":"$x" , "y":"$y"},
+        {"flag":"1" ,"timestamp":"$time" ,"x":"$x" , "y":"$y"}
+    ]
+}
+
+{ 
+    "point":[   
+        {"flag":"1" ,"timestamp":"135.182" ,"x":"t" , "y":"121.1"},
+        {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"},
+        {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"},
+        {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"},
+        {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"}
+    ]
+}
+
+{ 
+    "point":[
+    {"flag":"1" ,"timestamp":"t" ,"x":"121.1" , "y":"135.182"},
+    {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"},
+    {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"},
+    {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"},
+    {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"}
+    ]
+}
+
+{ 
+    "point":[
+        {"flag":"1" ,"timestamp":"t" ,"x":"" , "y":""},
+        {"flag":"1" ,"timestamp":"1" ,"x":"2" , "y":"1"},
+        {"flag":"1" ,"timestamp":"1" ,"x":"3" , "y":"5"},
+        {"flag":"1" ,"timestamp":"2" ,"x":"0" , "y":"1"},
+        {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"}
+    ]
+}
+
+Array ( 
+    [0] => t 
+    [info] => t 
+    [1] => 121.1 
+    [x] => 121.1 
+    [2] => 135.182 
+    [y] => 135.182 
+    [3] => 2013-12-25 08:56:02 
+    [_time] => 2013-12-25 08:56:02 
+) 
+
+{ 
+    "point":[
+        {"flag":"1" ,"timestamp":"t" ,"x":"121.1" , "y":"135.182"},
+        {"flag":"1" ,"timestamp":"t" ,"x":"121.1" , "y":"135.182"},
+        {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"},
+        {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"},
+        {"flag":"0" ,"timestamp":"0" ,"x":"0" , "y":"0"}
+    ]
+}
+
+{ 
+    "point":[
+    {"flag":"1" ,"info":"ss" ,"x":"124.8845259" , "y":"41.663141","timestamp":ss},
+    {"flag":"1" ,"info":"t" ,"x":"121.7845259" , "y":"41.763141","timestamp":t},
+    {"flag":"1" ,"info":"t" ,"x":"123.6845259" , "y":"41.863141","timestamp":t},
+    {"flag":"0" ,"info":"0" ,"x":"0" , "y":"0","timestamp":"0"},
+    {"flag":"0" ,"info":"0" ,"x":"0" , "y":"0","timestamp":"0"}
+    ]
+}
+
+{ 
+    "point":[
+    {"flag":"1" ,"info":"ss" ,"x":"124.8845259" , "y":"41.663141","timestamp":"ss"},
+    {"flag":"1" ,"info":"t" ,"x":"121.7845259" , "y":"41.763141","timestamp":"t"},
+    {"flag":"1" ,"info":"t" ,"x":"123.6845259" , "y":"41.863141","timestamp":"t"},
+    {"flag":"0" ,"info":"0" ,"x":"0" , "y":"0","timestamp":"0"},
+    {"flag":"0" ,"info":"0" ,"x":"0" , "y":"0","timestamp":"0"}
+    ]
+}
+
+{ 
+    "point":[
+    {"flag":"1" ,"info":"ss" ,"x":"124.8845259" , "y":"41.663141","timestamp":"2013-12-28 13:18:18"},
+    {"flag":"1" ,"info":"t" ,"x":"121.7845259" , "y":"41.763141","timestamp":"2013-12-28 12:48:03"},
+    {"flag":"1" ,"info":"t" ,"x":"123.6845259" , "y":"41.863141","timestamp":"2013-12-28 12:47:46"},
+    {"flag":"0" ,"info":"0" ,"x":"0" , "y":"0","timestamp":"0"},
+    {"flag":"0" ,"info":"0" ,"x":"0" , "y":"0","timestamp":"0"}
+    ]
+}
