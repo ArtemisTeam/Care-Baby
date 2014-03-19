@@ -43,11 +43,7 @@ public class Location extends Application {
 		mLocationClient = new LocationClient( this );
 		AVOSCloud.useAVCloudCN();
 		AVOSCloud.initialize(this, "9f9kc7n2gfm4ug07arijhef5roy4kvq4l1xh6voy714hfswm", "2nuzsw9x0tw3mheybe7spewu43bfwnfoujry68g51973watr");
-		/**â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?
-		 * è¿™é‡Œçš„AKå’Œåº”ç”¨ç­¾ååŒ…åç»‘å®šï¼Œå¦‚æœä½¿ç”¨åœ¨è‡ªå·±çš„å·¥ç¨‹ä¸­éœ€è¦æ›¿æ¢ä¸ºè‡ªå·±ç”³è¯·çš„Key
-		 * â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?â€”â?
-		 */
-		mLocationClient.setAK("8GX4jfnPmYXXeTwXP3QcccAy");
+
 		mLocationClient.registerLocationListener( myListener );
 		//mGeofenceClient = new GeofenceClient(this);
 
@@ -56,7 +52,7 @@ public class Location extends Application {
 	}
 	
 	/**
-	 * æ˜¾ç¤ºè¯·æ±‚å­—ç¬¦ä¸?
+	 * æ˜¾ç¤ºè¯·æ±‚å­—ç¬¦ï¿½?
 	 * @param str
 	 */
 	public void logMsg(String str) {
@@ -77,7 +73,7 @@ public class Location extends Application {
 		public void onReceiveLocation(BDLocation location) {
 			if (location == null)
 				return ;
-			//è·å–ç”µé‡ç™¾åˆ†æ¯?
+			//è·å–ç”µé‡ç™¾åˆ†ï¿½?
 			Intent batteryIntent = getApplicationContext().registerReceiver(null,
 					new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 			int currLevel = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);

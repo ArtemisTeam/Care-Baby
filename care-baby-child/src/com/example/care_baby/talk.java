@@ -74,7 +74,6 @@ public class talk extends Activity implements OnClickListener {
 			
 			((Location)getApplication()).username = preferences.getString("username", "");  
 			mLocClient = ((Location)getApplication()).mLocationClient;
-			mLocClient.setAK("8GX4jfnPmYXXeTwXP3QcccAy");
 			setLocationOption();
 			mLocClient.start();
 			mLocClient.requestLocation();	
