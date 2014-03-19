@@ -1,5 +1,4 @@
-<?php
-require '../system/connect.php';          
+<?php        
 require '../fun/fun.php';          
 if (isset($_COOKIE['user'])) {
     $url = "../php/user.php";
@@ -11,6 +10,9 @@ $flag=0;
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $user = $_POST['user'];
     $pass = $_POST['password'];
+} else {
+    $user = "";
+    $pass = "";
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -33,6 +35,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         window.location.href='../php/user.php';
     },
         error: function(user, error) {
+            if(username!="" || psw!=""){
+                alert("用户名或密码错误");
+            }
         // The login failed. Check error to see why.
     }
     });
@@ -68,9 +73,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     <form action="../php/login.php" method="post">
                         
                         <div class="sp"></div>
-                        <input  type="text" class="inputs" name="user"/>
+                        <input  type="text" class="inputs" name="user" placeholder="用户名"/>
                         <div class="sp"></div>
-                        <input  type="password" class="inputs" name="password"/>
+                        <input  type="password" class="inputs" name="password" placeholder="密码"/>
                         <div class="sp">
                         <?php 
                             if($flag){

@@ -5,5 +5,6 @@
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
   <link href=<?php echo $css; ?> type="text/css" rel="Stylesheet"/>
   <script src="https://cn.avoscloud.com/scripts/lib/av-0.2.7.min.js"></script>
+  <script src="../res/res.js"></script>
   <title><?php echo $title; ?></title>
 </head>
