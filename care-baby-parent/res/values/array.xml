@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="color_names">
+        <item>地图</item>
+        <item>聊天</item>
+        <item>短信</item>
+        <item>注销</item>
+    </string-array>
+
+</resources>
