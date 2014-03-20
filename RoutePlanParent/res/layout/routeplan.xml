@@ -19,9 +19,8 @@
             android:id="@+id/start"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="龙泽" >
-
+            android:ems="10" 
+ 			android:editable="false">
             <requestFocus />
         </EditText>
     </LinearLayout>
@@ -41,8 +40,7 @@
             android:id="@+id/end"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="西单" >
+            android:ems="10" >
 
             <requestFocus />
         </EditText>

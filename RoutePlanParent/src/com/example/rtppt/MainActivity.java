@@ -14,6 +14,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -84,15 +85,54 @@ public class MainActivity extends Activity {
 	//搜索相关
 	MKSearch mSearch = null;	// 搜索模块，也可去掉地图模块独立使用
 
+	//网络相关
 	private Thread mThread;
+	private Handler handler = new Handler();
+	//地图相关
+	private double latitude;
+	private double longtitude;
 	private String targetcity="北京";
 	private String startpoint=null;
 	private String endpoint=null;
+	private GeoPoint pt=null;
 	private String username="wanghe";
 	private String password="wanghe";
 	private String InstallationId=null;
 	private String targetID=null;
 	int traffic;//walk=1 bus=0
+
+	private Runnable runnableA = new Runnable() {
+		@Override
+		public void run () {
+			AVQuery<AVObject> query = new AVQuery<AVObject>("Location");
+			query.whereEqualTo("username", username+"_child");
+			query.orderByDescending("createdAt");
+			query.findInBackground(new FindCallback<AVObject>() {
+
+				@Override
+				public void done(List<AVObject> arg0, AVException arg1) {
+					// TODO Auto-generated method stub
+					if(arg1==null){
+						if(arg0!=null){
+							Log.i("state", arg0.size()+"");
+							AVObject point;
+							point=arg0.get(0);
+
+							latitude=point.getDouble("Latitude");
+							longtitude=point.getDouble("Longtitude");
+
+							pt=new GeoPoint((int)(latitude*1e6),
+									(int)(longtitude* 1e6));
+							mSearch.reverseGeocode(pt);
+						}
+					}
+				}
+
+			});
+			handler.postDelayed(this,5000); 
+		}
+
+	};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -112,7 +152,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.routeplan);
 		CharSequence titleLable="路线规划功能";
 		setTitle(titleLable);
-		
+
 		//加载AVOS数据
 		initData();
 		//初始化地图
@@ -212,8 +252,6 @@ public class MainActivity extends Activity {
 		mSearch = new MKSearch();
 		mSearch.init(app.mBMapManager, new MKSearchListener(){
 
-
-
 			@Override
 			public void onGetTransitRouteResult(MKTransitRouteResult res,
 					int error) {
@@ -296,6 +334,12 @@ public class MainActivity extends Activity {
 			}
 			@Override
 			public void onGetAddrResult(MKAddrInfo res, int error) {
+				if(error==0){
+					if(res.type==MKAddrInfo.MK_REVERSEGEOCODE){
+						startpoint=res.strAddr;
+						((EditText)findViewById(R.id.start)).setText(startpoint);
+					}
+				}
 			}
 			@Override
 			public void onGetPoiResult(MKPoiResult res, int arg1, int arg2) {
@@ -338,7 +382,7 @@ public class MainActivity extends Activity {
 		InstallationId=AVInstallation.getCurrentInstallation().getInstallationId();
 		Log.d("state","this device id is "+InstallationId);
 		AVInstallation.getCurrentInstallation().saveInBackground();
-		
+
 		//更新_User表中的installationId
 		AVUser user=new AVUser();
 		AVUser.logInInBackground(username+"_parent", password, new LogInCallback<AVUser>() {
@@ -363,7 +407,7 @@ public class MainActivity extends Activity {
 								AVQuery<AVObject> query2 = new AVQuery<AVObject>("_User");
 								query2.whereEqualTo("username", username+"_child");
 								query2.findInBackground(new FindCallback<AVObject>() {
-									
+
 									@Override
 									public void done(List<AVObject> avObjects, AVException e) {
 										if (e == null) {
@@ -385,8 +429,9 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
+		handler.postDelayed(runnableA,5000); 
 	}
-	
+
 	Runnable runnable = new Runnable() {
 
 		@Override
@@ -430,7 +475,8 @@ public class MainActivity extends Activity {
 
 		// 对起点终点的name进行赋值，也可以直接对坐标赋值，赋值坐标则将根据坐标进行搜索
 		MKPlanNode stNode = new MKPlanNode();
-		stNode.name = editSt.getText().toString();
+		stNode.pt=pt;//设置起点为孩子最新坐标
+//		stNode.name = editSt.getText().toString();
 		MKPlanNode enNode = new MKPlanNode();
 		enNode.name = editEn.getText().toString();
 
