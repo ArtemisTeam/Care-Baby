@@ -1,7 +1,9 @@
 package com.example.avosfile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -12,10 +14,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVOSCloud;
-import com.avos.avoscloud.AVObject;
 
 public class MainActivity extends Activity {
 
@@ -25,8 +25,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		AVOSCloud.useAVCloudCN();
 		AVOSCloud.initialize(this, "9f9kc7n2gfm4ug07arijhef5roy4kvq4l1xh6voy714hfswm", "2nuzsw9x0tw3mheybe7spewu43bfwnfoujry68g51973watr");
-		GetandSaveCurrentImage();
-//		uploadfile();
+		//		GetandSaveCurrentImage();
+		uploadfile();
 	}
 	/**
 	 * 获取和保存当前屏幕的截图
@@ -70,15 +70,18 @@ public class MainActivity extends Activity {
 		}  
 	}  
 	private void uploadfile(){
-		AVFile avFile;
-		try{
-		       AVObject avObject = new AVObject("Screenshot");
-		       avFile = new AVFile("test.png","/data/data/com.example.avosfile/files/test.png");
-		       avFile.save();
-		       avObject.put("username","用户名");
-		       avObject.saveInBackground();
-		}catch(AVException  e){
+		AVFile file=null;
+		try {
+			file = AVFile.withAbsoluteLocalPath("test.jpg", "/data/data/com.example.avosfile/files/test.png");//网站显示的文件名，文件本地路径
+			file.addMetaData("username", "wanghe");//上传者姓名
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		file.saveInBackground();
 	}
 
 	@Override
