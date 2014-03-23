@@ -36,8 +36,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <div id="menu">
             <form action="http://wherebaby.duapp.com/php/user.php" method="post">
                 <ul>
-                    <li><a href="" class="" style="background-color: rgba(53, 59, 49, 0.341176); font-size: 18px; line-height: 0px; padding: 31px 22px;">查看短信</a></li>
-                    <li><a href="" style="line-height: 0px; font-size: 18px; background-color: rgba(53, 59, 49, 0.341176); opacity: 1; padding: 31px 22px;">查看通话</a></li>
+                    <li><a href="http://wherebaby.duapp.com/php/sms.php" class="" style="background-color: rgba(53, 59, 49, 0.341176); font-size: 18px; line-height: 0px; padding: 31px 22px;">查看短信</a></li>
+                    <li><a href="http://wherebaby.duapp.com/php/call.php" style="line-height: 0px; font-size: 18px; background-color: rgba(53, 59, 49, 0.341176); opacity: 1; padding: 31px 22px;">查看通话</a></li>
                     <li style="height: 70px; font-size: 35px; line-height: 64px;"><input type="text" class="inputs" name="num" style="margin:25px 80px" placeholder="最近位置,请输入数字"></li>
                     <li><input class="log_sub" type="submit" value="确认" style="font-size: 20px; color: white;font-weight: bold;margin:25px 75px;
                                 background:#2a2a2a; width: 160px;height: 35px;float: left;position: relative;"></li>
@@ -138,7 +138,7 @@ window.onresize=function(){
 setTimeout(function(){map.setZoom(14);}, 1000); 
 setTimeout(function(){map.setZoom(16);}, 2000); 
 setTimeout(function(){map.setZoom(18);}, 3000); 
-
+changeWindow();
 
 
 
