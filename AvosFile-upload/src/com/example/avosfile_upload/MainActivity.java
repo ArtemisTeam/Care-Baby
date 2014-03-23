@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
 		AVFile file=null;
 		try {
 			file = AVFile.withAbsoluteLocalPath("test.jpg", "/data/data/com.example.avosfile/files/test.png");//网站显示的文件名，文件本地路径
-			file.addMetaData("username", "wanghe");//上传者姓名
+			String url=file.getUrl();//这个url需要调用聊天发出，家长端根据这个url下载图片
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
