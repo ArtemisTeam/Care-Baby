@@ -1,4 +1,4 @@
-package com.example.avosfile;
+package com.example.avosfile_upload;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +16,7 @@ import android.view.WindowManager;
 
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVOSCloud;
+import com.example.avosfile.R;
 
 public class MainActivity extends Activity {
 
