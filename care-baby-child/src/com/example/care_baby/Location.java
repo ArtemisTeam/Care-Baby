@@ -103,6 +103,7 @@ public class Location extends Application {
 			
 		}
 		
+		@Override
 		public void onReceivePoi(BDLocation poiLocation) {
 			if (poiLocation == null){
 				return ; 
@@ -112,6 +113,7 @@ public class Location extends Application {
 	}
 	
 	public class NotifyLister extends BDNotifyListener{
+		@Override
 		public void onNotify(BDLocation mlocation, float distance){
 			mVibrator01.vibrate(1000);
 		}
