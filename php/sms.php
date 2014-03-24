@@ -106,7 +106,7 @@ query.find({
             var sms_banner = document.getElementById('banner');
             var sms_table = document.createElement('table');
             sms_table.class="tb-sms-list";
-            sms_table.innerHTML = "  <tbody>    <tr dataid='429' class='>    <td width='20'>&nbsp;</td>    <td width='30'><i class='icons icon-check'></i></td>    <td width='60'><img src='../images2.0/avatar.png' alt=''></td>    <td class='ie7'>      <div class='inbox'>        <div class='box'>          <p>"+z+"</p>          <p class='time align-right'>"+x+y+"</p>        </div>        <i class='lt'></i>        <i class='rt'></i>        <i class='rb'></i>        <i class='lb'></i>        <i class='b-a'></i>      </div>    </td>    </tr>  </tbody>";
+            sms_table.innerHTML = "  <tbody>    <tr dataid='429' class='>    <td width='20'>&nbsp;</td>    <td width='30'><i class='icons icon-check'></i></td>    <td width='60'><img width='80' height='80' src='http://wherebaby.duapp.com/res/smsAvatar.png' alt=''></td>    <td class='ie7'>      <div class='inbox'>        <div class='box'>          <p>"+z+"</p>          <p class='time align-right'>"+x+":"+y+"</p>        </div>        <i class='lt'></i>        <i class='rt'></i>        <i class='rb'></i>        <i class='lb'></i>        <i class='b-a'></i>      </div>    </td>    </tr>  </tbody>";
             
             sms_banner.appendChild(sms_table);
         }
