@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,7 +18,14 @@ import android.util.Log;
 import android.app.Activity;
 
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CallLog;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -51,7 +59,9 @@ public class talk extends Activity implements OnClickListener {
 	    private final String ACTION_NAME= "发送广播"; 
 	    String message=null;
 	    String date=null;
-
+	    private float x=0,y=0,z=0;
+	    private SensorManager mSensorManager=null;
+	    private Sensor mSensor=null;
 		private Button mBtnSend;// 发送btn
 		private Button button_zx;
 		private EditText mEditTextContent;
@@ -78,7 +88,7 @@ public class talk extends Activity implements OnClickListener {
 			mLocClient.start();
 			mLocClient.requestLocation();	
 			
-			
+			getphone();
 			Log.i(username,password);
 			IntentFilter filter=new IntentFilter();
 			filter.addAction("com.avos.UPDATE_STATUS");
@@ -88,7 +98,15 @@ public class talk extends Activity implements OnClickListener {
 			initData();// 初始化数�?
 			mListView.setSelection(mAdapter.getCount() - 1);
 			
+			mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+			mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+
+			//给传感器绑定监听器  
+			mSensorManager.registerListener(myAccelerometerListener,mSensor, SensorManager.SENSOR_DELAY_NORMAL);  
+			
 		}
+		
+		
 		
 		private void setLocationOption(){
 			LocationClientOption option = new LocationClientOption();
@@ -101,6 +119,65 @@ public class talk extends Activity implements OnClickListener {
 			mLocClient.setLocOption(option);
 		}
 
+		final SensorEventListener myAccelerometerListener = new SensorEventListener(){ 
+
+			//复写onSensorChanged方法 
+			public void onSensorChanged(SensorEvent sensorEvent){ 
+				if(sensorEvent.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION){ 
+					Log.i(TAG,"onSensorChanged"); 
+					String text="";				
+					float X_lateral = sensorEvent.values[0]; //X轴方向的加速
+					float Y_longitudinal = sensorEvent.values[1]; //Y轴方向的加速
+					float Z_vertical = sensorEvent.values[2]; //Z轴方向的加速
+					float X,Y,Z;
+					X=Math.abs(X_lateral);
+					Y=Math.abs(Y_longitudinal);
+					Z=Math.abs(Z_vertical);	
+					int flag=0;
+					if(X>x){
+						x=X;
+						flag=1;
+					}
+					if(Y>y){
+						y=Y;
+						flag=1;
+					}
+					if(Z>z){
+						z=Z;
+						flag=1;
+					}
+					if(flag==1){
+						Log.i("wanghe","\n heading "+x); 
+						Log.i("wanghe","\n pitch "+y); 
+						Log.i("wanghe","\n roll "+z); 
+					}
+					if(X>12||Y>12||Z>10)
+					{
+						Toast.makeText(getApplicationContext(),"asdasdasd" , Toast.LENGTH_LONG).show();
+						String inputStr = "13130471085";
+						if(inputStr.trim().length()!=0)
+						{
+							Intent phoneIntent = new Intent("android.intent.action.CALL",Uri.parse("tel:" + inputStr));
+							startActivity(phoneIntent);
+							Log.i("wanghe","bochu");
+						}
+					}
+					text=""+X_lateral+'\n'+Y_longitudinal+'\n'+Z_vertical+'\n';
+
+				} 
+			} 
+			//复写onAccuracyChanged方法 
+			public void onAccuracyChanged(Sensor sensor , int accuracy){ 
+				Log.i(TAG, "onAccuracyChanged"); 
+
+			} 
+		}; 
+		@Override  
+		protected void onPause() {  
+			//在这里需要将绑定的监听器释放，否则即使程序退出监听程序仍会继续  
+			//mSensorManager.unregisterListener(myAccelerometerListener);  
+			super.onPause();  
+		}  
 
 	    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){ 
 
@@ -300,5 +377,40 @@ public class talk extends Activity implements OnClickListener {
 		@Override
 		protected void onDestroy(){
 			super.onDestroy();
+		}
+		private void getphone()
+		{
+			
+			ContentResolver cr = getContentResolver();
+			final Cursor cursor = cr.query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER,CallLog.Calls.CACHED_NAME,CallLog.Calls.TYPE, CallLog.Calls.DATE}, null, null,CallLog.Calls.DEFAULT_SORT_ORDER);
+			for (int i = 0; i < cursor.getCount(); i++) {   
+
+				String str = "";
+				String num ="";
+				int type;
+				String time;
+				Date date;
+				long duration ;
+				cursor.moveToPosition(i);
+				num = cursor.getString(0);
+				str = cursor.getString(1);
+				type = cursor.getInt(2);
+				duration = cursor.getInt(3);
+				SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		         date = new Date(Long.parseLong(cursor.getString(3)));
+		         time = sfd.format(date);
+				if(str==null)
+				{
+					str="未知";
+				}
+				AVObject avo=new AVObject("CallHistory");
+				avo.put("username",username);
+				avo.put("phonenumber", num);
+				String caller_name=null;//联系人姓名(陌生人就写陌生人)
+				avo.put("caller_name", str);//联系人姓名(陌生人就写陌生人)
+				avo.put("calltimet",time);//拨入时间
+				avo.put("FLAG",type);//持续时间
+				avo.saveInBackground();
+			}
 		}
 }

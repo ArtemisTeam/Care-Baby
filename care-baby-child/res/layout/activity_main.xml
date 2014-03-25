@@ -89,7 +89,7 @@
   	        android:layout_above="@+id/imageView1"
   	        android:layout_centerHorizontal="true"
   	        android:layout_marginBottom="31dp"
-  	        android:src="@drawable/baby" />
+  	        android:src="@drawable/denglu" />
 
   	    <ImageView
   	        android:id="@+id/imageView1"
